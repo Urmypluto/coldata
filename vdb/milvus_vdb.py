@@ -57,7 +57,7 @@ class DataProcessor:
     def split_texts(self, doc):
         search = ObjectId(doc[0].metadata["id"])
         current = self.mongo_collection.find_one({"_id": search}).keys()
-        if "chunk_id" in current.keys():
+        if "chunk_id" in current:
             return []
         with open("chunk_count.txt", "r") as ref:
             num = ref.read()
@@ -127,7 +127,7 @@ class DataProcessor:
                 "metric_type": "COSINE",
                 "params": {"nlist": 1024},
             }
-            self.collection.create_index(
+            self.milvus_collection.create_index(
                 field_name="page_content", 
                 index_params=index
             )
@@ -155,7 +155,7 @@ class DataProcessor:
             "params": {"nprobe": 10}
         }
 
-        results = self.collection.search(
+        results = self.milvus_collection.search(
             data=[self.model.encode([query], convert_to_tensor=True)[0].tolist()], 
             anns_field="page_content", 
             param=search_params,

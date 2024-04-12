@@ -8,6 +8,7 @@ connection:
 
 database:
   client_url: ''
+  db_name: Crawl-Data
   collection_name: metadata
 
 model:
